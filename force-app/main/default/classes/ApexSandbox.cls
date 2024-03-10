@@ -218,6 +218,128 @@ public with sharing class ApexSandbox {
         return true; // No divisors found, so it's a prime number
     }
 
+    public Integer sumToN(Integer n) {
+        if (n > 0) {
+            return n + sumToN(n - 1);
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public String formatName(String firstName, String lastName) {
+        if (String.isBlank(firstName) && String.isBlank(lastName)) {
+            return '';
+        }
+        else if (String.isBlank(firstName)) {
+            return lastName;
+        }
+        else if (String.isBlank(lastName)) {
+            return firstName;
+        }
+        else {
+            return lastName + ', ' + firstName;
+        }
+    }
+
+    public String nameFromEmail(String email) {
+        String s1 = email.substringBefore('.').toLowerCase();
+        String s2 = email.substringBetween('.', '@').toLowerCase();
+        return s1.capitalize() + ' ' + s2.capitalize();
+    }
+
+    public String changeTimeFormat(String strTime) {
+        String amPm;
+        String hhStr = strTime.substringBefore(':');
+        String mmStr = strTime.substringAfter(':');
+        Integer hhInt = Integer.valueOf(hhStr);
+        Integer mmInt = Integer.valueOf(mmStr);
+        
+        // handle 12:00 AM -> 09:59 AM (24 hours = 00:00 -> 11:59)
+        if (hhInt >= 0 && hhInt <= 11) {
+            // Add 0/00 will return 12
+            if (hhInt == 00) {
+                hhStr = '12';
+            }
+            // Add 0 prefix for 0-9
+            else if (hhInt <= 9) {
+                hhStr = '0' + String.valueOf(hhInt);
+            }
+            // 10 & 11 do not add '0'
+            else {
+                hhStr = String.valueOf(hhInt);
+            }
+            // always AM for 00-11
+            amPm = ' AM';
+        }
+        // else time is past 12:00 and PM
+        else {
+            if (hhInt == 12) {
+                hhStr = '12';
+            }
+            // 10 and 11 do not need 0 prefix
+            else if (hhInt >= 22 && hhInt <= 23) {
+                hhStr = String.valueOf(Math.mod(hhInt, 12));
+            }
+            // 13 mod 12 = 1, 14 mod 12 = 2, etc, add 0 Prefix
+            else {
+                hhStr = '0' + String.valueOf(Math.mod(hhInt, 12));
+            }
+            // always PM for 12-23
+            amPm = ' PM';
+        }
+        return hhStr + ':' + mmStr + amPm;
+    }
+    
+    public Integer fibonacci(Integer n) {
+        if (n <= 1) {
+            return n;
+        }
+        else {
+            return fibonacci(n-1) + fibonacci(n-2);
+        }
+        /*
+            Assert.areEqual(1, fibonacci(1)); // 1
+            Assert.areEqual(1, fibonacci(2)); // 1 + 0
+            Assert.areEqual(2, fibonacci(3)); // 1 + 1
+            Assert.areEqual(3, fibonacci(4)); // 2 + 1
+            Assert.areEqual(5, fibonacci(5)); // 3 + 2
+        */
+    }
+
+    public Integer nextPrime(Integer num) {
+        if (isPrime(num + 1) == true) {
+            return num + 1;
+        }
+        else {
+            return nextPrime(num + 1);
+        }
+        /*
+            Assert.areEqual(2, nextPrime(0));
+            Assert.areEqual(2, nextPrime(1));
+            Assert.areEqual(3, nextPrime(2));
+            Assert.areEqual(5, nextPrime(3));
+        */
+    }
+
+    public String reverseWordsInASentence(String sentence){
+        if (sentence == null || String.isBlank(sentence.trim())) {
+            return sentence;
+        }
+        
+        List<String> words = sentence.split(' ');
+        String reversedSentence = '';
+        
+        for (Integer i = words.size() - 1; i >= 0; i--) {
+            reversedSentence += words[i];
+            if (i > 0) {
+                reversedSentence += ' ';
+            }
+        }
+        
+        return reversedSentence;
+    }
+
 
 }
 
