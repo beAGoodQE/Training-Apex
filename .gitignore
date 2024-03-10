@@ -1,0 +1,4 @@
+.forceignore
+.sf/
+.sfdx/
+.vscode/
