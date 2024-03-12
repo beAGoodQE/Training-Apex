@@ -134,7 +134,69 @@ public List<apxio__Student__c> selectStudentsWithoutContactInfo() {
         }
     }
 
+    public Id classFromCourse(String courseName) {
+        try {
+            List<apxio__Course__c> courses = [SELECT Id FROM apxio__Course__c WHERE Name = :courseName];
+            if (courses.size() == 0) return null;
+            apxio__Class__c cls = new apxio__Class__c(
+                apxio__Course__c = courses[0].Id,
+                Name = courseName
+            );
+            insert cls;
+            return cls.Id;
+        }
+    
+        catch(DmlException e) {
+            System.debug('Error:== ' + e.getMessage());
+            return null;
+        }
+    }
+    
+    public Id classFromCourse(String courseName) {
+        try {
+            List<apxio__Course__c> courses = [SELECT Id FROM apxio__Course__c WHERE Name = :courseName];
+            if (courses.size() == 0) return null;
+            apxio__Class__c cls = new apxio__Class__c(
+                apxio__Course__c = courses[0].Id,
+                Name = courseName
+            );
+            insert cls;
+            return cls.Id;
+        }
+        catch (DmlException e) {
+            System.debug('Error:== ' + e.getMessage());
+            return null;   
+        }
+    }
 
+public void enrollStudents(List<String> emails, String className) {
+    try {
+    // Get Class Id by Name
+    apxio__Class__c cls = [Select Id
+                           From apxio__Class__c
+                           Where Name = :className];
+
+    // Form list of Students by Email
+    List<apxio__Student__c> students = [Select Id
+                                       From apxio__Student__c
+                                       Where apxio__Email__c IN :emails];
+
+    // Create list to populate enrollments using Class Id and Student Id
+    List<apxio__Class_Enrollment__c> enrollList = new List<apxio__Class_Enrollment__c>();
+
+    for (apxio__Student__c student : students) {
+        apxio__Class_Enrollment__c enroll = new apxio__Class_Enrollment__c();
+        enroll.apxio__Student__c = student.Id;
+        enroll.apxio__Offered_Class__c = cls.Id;
+        enrollList.add(enroll);
+    }
+
+    insert enrollList;
+    }
+
+    catch (DmlException e) {
+        System.debug('Error:== ' + e.getMessage());
+    }
 }
 
 
