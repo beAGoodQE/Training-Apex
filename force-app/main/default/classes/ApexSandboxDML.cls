@@ -108,6 +108,7 @@ public List<apxio__Student__c> selectStudentsWithoutContactInfo() {
 
         apxio__Class__c cls = new apxio__Class__c();
         cls.Name = name;
+        // ? is "Safe Navigation" to ensure null is returned in case description is null
         cls.apxio__Description__c = description?.left(255);
         cls.apxio__Course__c = course.Id;
         insert cls;
