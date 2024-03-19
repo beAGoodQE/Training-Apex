@@ -1,105 +1,201 @@
-public with sharing class ApexSandboxSObjects {
-  public ApexSandboxSObjects() {
+public with sharing class ApexSandboxLists {
+  public ApexSandboxLists() {
   
   }
 
-  public Boolean duplicateContacts(Contact c1, Contact c2) {
-    return (c1.Email != null && c1.Email == c2.Email) || (c1.Phone != null && c1.Phone == c2.Phone);
+  public Integer secondLargest(List<Integer> numbers) {
+    Integer largestSoFar = -2147483647 - 1;
+    Integer secondLargestSoFar = -2147483647 - 1;
+
+    for (Integer i=0;i<numbers.size(); i++) {
+        if (numbers[i] < largestSoFar && numbers[i] > secondLargestSoFar) {
+            secondLargestSoFar = numbers[i];
+        }
+        else if (numbers[i] > largestSoFar) {
+            secondLargestSoFar = largestSoFar;
+            largestSoFar = numbers[i];
+        }
+    }
+    return secondLargestSoFar;
   }
 
-  public void setAccountRating(Account a) {
-    if (a.AnnualRevenue <= 100000) {
-        a.Rating = 'Cold';
-    }
-    else if (a.AnnualRevenue <= 500000) {
-        a.Rating = 'Warm';
-    }
-    else {
-        a.Rating = 'Hot';
-    }
-  }
-
-  public Boolean isBirthday(Contact c) {
-    Integer mm = c.Birthdate.month();
-    Integer dd = c.Birthdate.day();
-
-    Date todaysDate = Date.today();
-
-    if (mm == todaysDate.month() && dd == todaysDate.day()) {
+  public boolean isSorted(List<Integer> numbers) {
+    if (isAscending(numbers) || isDescending(numbers))
         return true;
+    return false;
+  }
+
+  public boolean isAscending(List<Integer> numbers) {        
+    for(Integer i = 0; i < numbers.size() - 1; i++)
+        if (numbers[i] > numbers[i+1])
+            return false;
+    return true;
+  }
+
+  public boolean isDescending(List<Integer> numbers) {        
+    for(Integer i = 0; i < numbers.size() - 1; i++)
+        if (numbers[i] < numbers[i+1])
+            return false;
+    return true;
+  }
+
+
+  public List<String> orgNames(List<String> adjectives, List<String> animals) {
+    List<String> results = new List<String>();
+
+    for (String adjective : adjectives) {
+        for (String animal : animals) {
+            results.add(adjective + '-' + animal);
+        }
+    }
+
+    return results;
+  }
+
+  public List<Integer> fibonacciSeries(Integer n) {
+    List<Integer> results = new List<Integer>();
+    if (n <= 0) {
+        return results;
+    }
+
+    Integer previous = 0;
+    Integer current = 1;
+
+    for (Integer i = 0; i < n; i++) {
+        results.add(current);
+        Integer next = current + previous;
+        previous = current;
+        current = next;
+    }
+
+    return results;
+  }
+  
+  public List<String> fullNames(List<String> firstNames, List<String> lastNames) {
+    List<String> fNames = New List<String>();
+
+    for(Integer i = 0; i < firstNames.size(); i++) {
+        fNames.add(firstNames[i] + ' ' + lastNames[i]);
+    } 
+
+    return fNames;
+  }
+  
+  public void insertAtStart(String cityName, List<String> cities) {
+    if (0 == cities.size()) {
+        cities.add(cityName);
     }
     else {
-        return false;
+        cities.add(0, cityName);
     }
   }
 
-  public Boolean isKeyAccount(Account a) {
+  public Decimal average(List<Decimal> numbers){
+    Decimal divisor = numbers.size();
+    Decimal sum = 0;
 
-    Boolean isKeyAccount;
-    switch on a.Industry {
-        when 'Banking' {
-            isKeyAccount = a.AnnualRevenue >= 600000;
-        }
-        when 'Technology' {
-            isKeyAccount = a.AnnualRevenue >=  800000;
-        }
-        when 'Retail' {
-            isKeyAccount = a.AnnualRevenue >=  2000000;
-        }
-        when else {
-            isKeyAccount = a.AnnualRevenue >= 500000;
-        }
+    for (Decimal num : numbers) {
+        sum = sum + num;
     }
-    return isKeyAccount;
+
+    return sum.divide(divisor, 2);
   }
 
-  public void escalateIfMeetsCriteria(Case c) {
-    if ((c.Type == 'Mechanical' || c.Type == 'Electrical') && c.Reason == 'Breakdown' && c.Status == 'In Progress') {
-        c.IsEscalated = true;
+  public Integer maxConsecutiveOnes(Integer[] numbers) {
+    Integer currentCount = 0;
+    Integer maxCount = 0;
+    for (Integer i = 0; i<numbers.size(); i++){
+        if (numbers[i] == 1){
+            currentCount++;
+            if (currentCount > maxCount) {
+                maxCount = currentCount;
+            }
+        }
+        else if (numbers[i] == 0){
+            currentCount = 0;
+        }
     }
+    return maxCount;
   }
 
-  public Boolean sameParent(Contact c, Opportunity opp) {
-    if (c.AccountId == null || opp.AccountId == null) {
-        return false;
+  public List<String> getNamesInAscOrder(List<String> accountNames) {
+    accountNames?.sort();
+    return accountNames;
+  }
+
+  public static Integer arraySum(List<Integer> numbers) {
+    Integer sum = 0;
+
+    for (Integer n : numbers) {
+      // sum += n;
+      sum = sum + n;
+    }
+
+    return sum;
+  }
+
+  public Integer findTargetCount(List<Integer> nums, Integer target) {
+    Integer count = 0;
+
+    for (Integer num : nums) {
+        if (target == num) {
+            count++;
+        }
+    }
+
+    return count;
+  }
+
+  public static Integer findLast(List<Integer> nums, Integer target) {
+    Integer index = -1;
+
+    for (Integer i = 0; i < nums.size(); i++) {
+        if (target == nums[i]) {
+            index = i;
+        }
+    }
+
+    if (index == -1) {
+        return -1;
     }
     else {
-        return (c.AccountId == opp.AccountId);
+        return index;
     }
   }
 
-  public Boolean sameParent(Account acc, Contact con, Opportunity opp) {
-    if (acc.Id == null || con.AccountId == null || opp.AccountId == null) {
-        return false;
+  public List<Integer> evenNumbers(Integer n) {
+    List<Integer> results = new List<Integer>();
+
+    for (Integer i = 1; i <= n; i++){
+        results.add(i * 2);
     }
-    else {
-        return (acc.Id == con.AccountId && acc.Id == opp.AccountId);
-    }
+
+    return results;
   }
 
-  public void setParent(Account acc, Contact con, Opportunity opp) {
-
-    if (acc != null && acc.Id != null) {
-        con.AccountId = acc.Id;
-        opp.AccountId = acc.Id;
-    }
+  public static Integer findLargest(List<Integer> nums) {
+    Integer largest = nums[0];
+  
+      for (Integer i = 0; i < nums.size(); i++) {
+          if (nums[i] > largest) {
+              largest = nums[i];
+          }
+      } 
+  
+      return largest;
   }
 
-  public void linkParent(Case c1, Case c2) {
+  public List<Integer> positiveIntegers(List<Integer> numbers) {
+    List<Integer> positives = new List<Integer>();
 
-    if (c1.ContactId != null && c2.ContactId != null && c1.ContactId == c2.ContactId) {
-        if (c1.CreatedDate < c2.CreatedDate) {
-            c2.ParentId = c1.Id;
-        }
-        else if (c2.CreatedDate < c1.CreatedDate) {
-            c1.ParentId = c2.Id;
-        }
-        else {
-            c1.ParentId = null;
-            c2.ParentId = null;
+    for (Integer posInt : numbers) {
+        if (posInt > 0) {
+            positives.add(posInt);
         }
     }
-}
+
+    return positives;
+  }
 
 
 }
