@@ -2,7 +2,22 @@ public with sharing class ApexSandboxMaps {
   public ApexSandboxMaps() {
   }
 
+  public Map<String, List<Case>> casesByType(List<Case> cases) {
+    Map<String, List<Case>> result = new Map<String, List<Case>>();
 
+    for (Case cas : cases) {
+        if (cas.Type != null) {
+            if (result.containsKey(cas.Type)) {
+                result.get(cas.Type).add(cas);
+            }
+            else {
+                result.put(cas.Type, new List<Case> { cas });
+            }
+        }
+    }
+
+    return result;
+  }
 
   public Map<String, Decimal> industrySummary(List<Account> accounts) {
     Map<String, Decimal> summary = new Map<String, Decimal>();
