@@ -117,7 +117,7 @@ public List<apxio__Student__c> selectStudentsWithoutContactInfo() {
         System.debug('Error:== ' + e.getMessage());
     }
 
-    public void insertStudents(List<String> studentNames, List<String> studentEmails) {
+    void insertStudents(List<String> studentNames, List<String> studentEmails) {
         try {
             List<apxio__Student__c> students = new List<apxio__Student__c>();
     
@@ -135,7 +135,7 @@ public List<apxio__Student__c> selectStudentsWithoutContactInfo() {
         }
     }
 
-    public Id classFromCourse(String courseName) {
+    Id classFromCourse(String courseName) {
         try {
             List<apxio__Course__c> courses = [SELECT Id FROM apxio__Course__c WHERE Name = :courseName];
             if (courses.size() == 0) return null;
@@ -170,7 +170,7 @@ public List<apxio__Student__c> selectStudentsWithoutContactInfo() {
         }
     }
 
-public void enrollStudents(List<String> emails, String className) {
+    void enrollStudents(List<String> emails, String className) {
     try {
     // Get Class Id by Name
     apxio__Class__c cls = [Select Id

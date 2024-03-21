@@ -36,7 +36,7 @@ private class AccountWrapper_Tests {
     System.assert(sanityCheckListOfOpps.size() > 0, 'You need an opportunity to continue');
     Test.startTest();
     for(AccountWrapper a : accounts){
-      System.assert(a.isHighPriority());
+      System.assert(a.isHighPriority(), 'Account should have been High Priority');
     }
     Test.stopTest();
     }
@@ -65,11 +65,11 @@ private class AccountWrapper_Tests {
 	    }
 	  }
 	  Test.stopTest();
-        System.debug('BK exceptions.size(): ' + exceptions.size());
+//        System.debug('BK exceptions.size(): ' + exceptions.size());
         System.assert(exceptions.size() >= 1, 'Exceptions list should have at least 1 exception');
 	  for(Boolean b : exceptions){
           system.assert(b, 'Account should have thrown an exception');
-          System.debug('BK End Test');
+//          System.debug('BK End Test');
 	  }
 }
 }
